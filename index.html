@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrismLearn | Interactive Education</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Enhanced Ambient Background Animation */
+        .ambient-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.2), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.15), transparent 30%),
+                radial-gradient(circle at 50% 80%, rgba(167, 139, 250, 0.1), transparent 35%);
+            animation: pulseBg 12s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+            100% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(167, 139, 250, 0.4);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 15s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+        }
+
+        /* Enhanced Glassmorphism */
+        .glass {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .glass-card:hover::before {
+            left: 100%;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 25px 50px -12px rgba(0,0,0,0.6), 
+                0 0 30px rgba(139, 92, 246, 0.2),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+        }
+
+        /* Enhanced Tab Design */
+        .subject-tab {
+            position: relative;
+            transition: all 0.4s ease;
+            opacity: 0.5;
+            overflow: hidden;
+        }
+        
+        .subject-tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .subject-tab:hover {
+            opacity: 0.9;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .subject-tab:hover::before {
+            opacity: 1;
+        }
+
+        .subject-tab.active {
+            opacity: 1;
+            color: #fff;
+            background: rgba(139, 92, 246, 0.15);
+        }
+        
+        .subject-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #a78bfa, transparent);
+            box-shadow: 0 0 15px #a78bfa;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Gradient text animation */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient 8s ease infinite;
+        }
+
+        /* Featured badge pulse */
+        .featured-badge {
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.6); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #4c1d95, #6366f1);
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #5b21b6, #818cf8);
+        }
+
+        /* Smooth reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: reveal 0.8s ease forwards;
+        }
+
+        @keyframes reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal:nth-child(1) { animation-delay: 0.1s; }
+        .reveal:nth-child(2) { animation-delay: 0.2s; }
+        .reveal:nth-child(3) { animation-delay: 0.3s; }
+        .reveal:nth-child(4) { animation-delay: 0.4s; }
+        .reveal:nth-child(5) { animation-delay: 0.5s; }
+        .reveal:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body class="min-h-screen selection:bg-violet-500 selection:text-white">
+
+    <!-- Ambient Background -->
+    <div class="ambient-bg"></div>
+
+    <!-- Floating Particles -->
+    <div id="particles-container"></div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed w-full top-0 z-50 transition-all duration-300 glass border-b border-white/5">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold tracking-tight text-white flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center shadow-lg group-hover:shadow-violet-500/50 transition-all group-hover:scale-110">
+                    <span class="text-lg">P</span>
+                </div>
+                <span class="brand-font">Prism<span class="text-violet-400">Learn</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <span class="hidden md:block text-sm text-slate-400">All features unlocked</span>
+                <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        
+        <!-- Hero Section -->
+        <section class="text-center mb-24 relative">
+            <!-- Enhanced decorative orbs -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-violet-600/20 blur-[120px] rounded-full pointer-events-none animate-pulse"></div>
+            <div class="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+            
+            <h1 class="text-5xl sm:text-7xl font-bold text-white mb-6 tracking-tight leading-tight relative z-10">
+                Knowledge, <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-fuchsia-300 to-indigo-400 animate-gradient">Illuminated.</span>
+            </h1>
+            <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10 font-light leading-relaxed relative z-10">
+                Experience education in high fidelity. PrismLearn turns abstract concepts into immersive, interactive simulations.
+            </p>
+            <div class="relative z-10">
+                <button onclick="document.getElementById('interface').scrollIntoView({behavior: 'smooth'})" 
+                    class="group relative px-10 py-5 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-lg hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-500/30 overflow-hidden">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Explore Modules
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </span>
+                </button>
+                <p class="mt-4 text-sm text-slate-500">Instant access • No registration required</p>
+            </div>
+        </section>
+
+        <!-- Main Interface -->
+        <section id="interface" class="glass rounded-3xl p-1 border border-white/10 shadow-2xl overflow-hidden relative">
+            
+            <!-- Tab Navigation -->
+            <div class="bg-black/20 backdrop-blur-md p-2 flex overflow-x-auto justify-center gap-2 border-b border-white/5">
+                <button onclick="switchTab('Maths')" id="tab-Maths" class="subject-tab active px-6 py-3 rounded-lg text-sm uppercase tracking-widest font-medium text-slate-300 hover:bg-white/5">
+                    Maths
+                </button>
+                <button onclick="switchTab('Physics')" id="tab-Physics" class="subject-tab px-6 py-3 rounded-lg text-sm uppercase tracking-widest font-medium text-slate-300 hover:bg-white/5">
+                    Physics
+                </button>
+                <button onclick="switchTab('Chemistry')" id="tab-Chemistry" class="subject-tab px-6 py-3 rounded-lg text-sm uppercase tracking-widest font-medium text-slate-300 hover:bg-white/5">
+                    Chemistry
+                </button>
+                <button onclick="switchTab('Biology')" id="tab-Biology" class="subject-tab px-6 py-3 rounded-lg text-sm uppercase tracking-widest font-medium text-slate-300 hover:bg-white/5">
+                    Biology
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div class="p-8 md:p-12 min-h-[400px] bg-[#0A0A0A]">
+                <div id="grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-6 rounded-2xl text-center reveal">
+                <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-violet-500/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Instant Access</h3>
+                <p class="text-sm text-slate-400">Jump straight into learning with no barriers</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center reveal">
+                <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Interactive</h3>
+                <p class="text-sm text-slate-400">Real-time simulations you can touch and feel</p>
+            </div>
+            <div class="glass-card p-6 rounded-2xl text-center reveal">
+                <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-fuchsia-500/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-fuchsia-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">Comprehensive</h3>
+                <p class="text-sm text-slate-400">Full curriculum coverage across subjects</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Data Structure
+        const prismData = {
+            Maths: {
+                link: "https://math-vis-o9bm.vercel.app/",
+                items: [
+                    { title: "Launch Math Visualizer", desc: "Access the full suite of interactive mathematical tools and real-time graphing.", featured: true },
+                    { title: "3D Geometry Explorer", desc: "Explore shapes in euclidean space with interactive rotation and manipulation." },
+                    { title: "Calculus Grapher", desc: "Real-time derivative and integral plotting with step-by-step solutions." },
+                    { title: "Linear Algebra", desc: "Matrix operations and transformations visualized in real-time." },
+                    { title: "Statistics Dashboard", desc: "Interactive probability distributions and statistical analysis tools." },
+                    { title: "Number Theory", desc: "Prime factorization, modular arithmetic, and cryptography basics." }
+                ]
+            },
+            Physics: {
+                link: "https://main-phy.vercel.app/",
+                items: [
+                    { title: "Enter Physics Lab", desc: "Main portal for physics simulations with real-world scenarios.", featured: true },
+                    { title: "Kinematics Simulator", desc: "Projectile motion and velocity vectors with adjustable parameters." },
+                    { title: "Optics Bench", desc: "Lenses, mirrors, and light ray tracing in virtual laboratory." },
+                    { title: "Wave Mechanics", desc: "Interference patterns, standing waves, and harmonic motion." },
+                    { title: "Electromagnetism", desc: "Electric fields, magnetic fields, and electromagnetic induction." },
+                    { title: "Quantum Mechanics", desc: "Particle-wave duality and quantum state visualization." }
+                ] 
+            },
+            Chemistry: {
+                link: "https://quantum-periodic.vercel.app/",
+                items: [
+                    { title: "Quantum Periodic Table", desc: "Interactive element explorer with orbital views and electron configurations.", featured: true },
+                    { title: "Molecular Builder", desc: "Construct atoms and molecules in 3D with bond angle calculations." },
+                    { title: "Reaction Stoichiometry", desc: "Visual balancing of chemical equations with mass calculations." },
+                    { title: "Thermodynamics", desc: "Energy diagrams, enthalpy, and entropy visualizations." },
+                    { title: "Acid-Base Reactions", desc: "pH calculations and titration curve simulations." },
+                    { title: "Organic Chemistry", desc: "Functional groups and reaction mechanisms in 3D." }
+                ]
+            },
+            Biology: {
+                link: "#",
+                items: [
+                    { title: "Coming Soon", desc: "Biological visualizations are currently in development. Check back soon!", locked: true },
+                    { title: "Cell Structure", desc: "Detailed breakdown of animal and plant cells with organelle functions.", locked: true },
+                    { title: "DNA Helix", desc: "Interactive genetic code explorer and protein synthesis.", locked: true },
+                    { title: "Ecosystem Dynamics", desc: "Food chains, energy flow, and population modeling.", locked: true },
+                    { title: "Human Anatomy", desc: "Interactive 3D models of organ systems and physiology.", locked: true },
+                    { title: "Evolution Timeline", desc: "Phylogenetic trees and natural selection simulations.", locked: true }
+                ]
+            }
+        };
+
+        let activeSubject = 'Maths';
+
+        // Tab Switching
+        window.switchTab = (subject) => {
+            activeSubject = subject;
+            document.querySelectorAll('.subject-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${subject}`).classList.add('active');
+            renderGrid();
+        };
+
+        // Render Grid
+        function renderGrid() {
+            const container = document.getElementById('grid-container');
+            container.innerHTML = '';
+
+            const data = prismData[activeSubject];
+            data.items.forEach((item, index) => {
+                const isLocked = item.locked || false;
+                const card = document.createElement('div');
+                
+                let cardContent = `
+                    <div class="h-full flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="p-2 rounded-lg text-xs font-semibold ${item.featured ? 'bg-violet-500/20 text-violet-300 featured-badge' : 'bg-slate-800 text-slate-400'}">
+                                    ${item.featured ? '★ Featured' : '● Module'}
+                                </span>
+                                ${isLocked ? '<span class="text-xs font-mono text-amber-400 border border-amber-600/30 bg-amber-500/10 px-2 py-1 rounded">BETA</span>' : ''}
+                            </div>
+                            <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed">${item.desc}</p>
+                        </div>
+                        ${!isLocked ? `
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-sm font-medium text-violet-400 group-hover:text-violet-300 transition-colors">
+                            Launch Simulation 
+                            <svg class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </div>` : `
+                        <div class="mt-6 pt-4 border-t border-white/5 flex items-center text-sm font-medium text-slate-500">
+                            In Development
+                        </div>`}
+                    </div>
+                `;
+
+                card.className = `glass-card p-6 rounded-2xl relative group reveal ${!isLocked ? 'cursor-pointer' : 'opacity-60 cursor-not-allowed'}`;
+                card.innerHTML = cardContent;
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                if (!isLocked) {
+                    card.onclick = () => window.open(data.link, '_blank');
+                }
+                container.appendChild(card);
+            });
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGrid();
+            createParticles();
+        });
+    </script>
+</body>
+</html>
