@@ -7,5 +7,6 @@ export const firebaseConfig = {
     projectId: "prismlearn-a737a",
     storageBucket: "prismlearn-a737a.firebasestorage.app",
     messagingSenderId: "254286659458",
-    appId: "1:254286659458:web:ad4fa3c7c93cb84604999b"
+    appId: "1:254286659458:web:ad4fa3c7c93cb84604999b",
+    measurementId: "G-ZMV0JFJENW"
 };

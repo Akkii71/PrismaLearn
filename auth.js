@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 import { 
     getAuth, 
     createUserWithEmailAndPassword, 
@@ -14,6 +15,14 @@ import { firebaseConfig } from './firebase-config.js';
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// Initialize Analytics (with error handling for environments that don't support it)
+try {
+    const analytics = getAnalytics(app);
+} catch (error) {
+    console.log("Analytics not available:", error.message);
+}
+
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
