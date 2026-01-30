@@ -3,7 +3,7 @@
 
 export const firebaseConfig = {
     apiKey: "AIzaSyDCYORqElq-Rm6uk30okARLrzkNb27HKY4",
-    authDomain: "Yprismlearn-a737a.firebaseapp.com",
+    authDomain: "prismlearn-a737a.firebaseapp.com",
     projectId: "prismlearn-a737a",
     storageBucket: "prismlearn-a737a.firebasestorage.app",
     messagingSenderId: "254286659458",
